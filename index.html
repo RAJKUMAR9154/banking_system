@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banking System Web Page</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+   <style>
+body{
+    margin: 0;
+    font-family: Arial,sans-serif;
+    background: linear-gradient(135deg,#6dd5ed,#2193b0);
+    color: #333333cb;
+}
+body.logged-in{
+  background: linear-gradient(135deg,#006a0080,#e4e5e6);
+
+}
+header {
+    background: rgba(255,255,255,0.9);
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+main {
+    padding: 20px;
+    margin:30px auto;
+    max-width:900px;
+}
+footer{
+    background: #004080;
+    color: white;
+    text-align: center;
+    padding: 0.1rem;
+    position: fixed;
+    bottom: 0;
+    left:0;
+    width: 100%;
+}
+
+#login-container {
+    display:flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom:20px;
+
+}
+
+.login-box  {
+    flex:1;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+.login-box h2 {
+    margin-top:0;
+    color: #2193b0;
+}
+input {
+    display:block;
+    width:50%;
+    margin:10px 0;
+    padding:12px;
+    border:1px solid#ccc;
+    border-radius: 8px;
+    font-size:1rem;
+}
+button {display:block;width:50%;padding:12px;margin-top: 10px;border: none;border-radius: 8px;background: #2193b0;color:#fff;font-weight: bold;cursor:pointer;}
+button:hover {background: #17627d};
+#dashboard {
+    margin-top:20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+#dashboard h2 {
+    color:#2193b0;
+}
+.actions button:hover {
+    background:#357a38;
+}
+.instructions {
+    background: #f9f9f9;
+    border:1px solid #ddd;
+    max-width:600px;
+    margin:30px auto;
+    padding: 15px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-size: 14px;
+    color: #333;
+    position:relative;
+    left:1px;
+
+
+}
+
+.instructions ul{
+    margin: 0;
+    padding-left: 20px;
+}
+.instructions h3{
+    margin-top: 0;
+    color: #004080;
+}
+
+input,button{
+    width: 100%;
+    max-width:300px;
+    box-sizing:border-box;
+
+}
+#dashboard p{
+    color:black;
+    font-size: 1.2rem;
+    margin:10px 0;
+}
+#dashboard{
+  display:none;
+  margin-top: 10px;
+}
+.actions-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px, 1fr));
+    gap:20px;
+    margin-top:20px;
+}
+.actions-card {
+    background: #fff;
+    padding: 25px 15px;
+    border-radius:15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s,background 0.2s;
+
+}
+.actions-card i{
+    color: #2193b0;
+    margin-bottom: 12px;
+    display: block;
+    font-size: 2.5rem;
+}
+.actions-card p{
+    margin:0;
+    font-weight: bold;
+    color:#004080;
+    font-size:1rem;
+}
+.actions-card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 6px 15px rgba(0,0,0,0.25);
+}
+.summary-card {
+  background:white;
+  color: pink;
+  padding:40px 80px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  margin-bottom: 20px;
+  text-align: center;
+}
+.or-box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color:orange;
+  padding: 10px;
+}
+body.login-user {
+  background: linear-gradient(135deg,#6fed6d9c,#2193b0);
+}
+body.login-pin {
+  background: linear-gradient(135deg,#ff9966,#ff5e6123);
+}
+body.show-balance {
+  background:white;
+  color: #ddd;
+}
+button.backBtn {
+  background: #6c757d;
+  color: white;
+  font-weight: bold;
+}
+
+   </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome Banking System</h1>
+  </header>
+
+  <main id="app">
+    <div id="login-container">
+
+      <section id="summary-dashboard" style="display: none;">
+        <div class="summary-card">
+          <h2>Welcome,<span id="accountNumberInput">XXXX-XXX-1234</span></h2>
+        </div>
+      </section>
+
+      <section id="dashboardIntro" style="display:none;">
+        <h3>Banking Services</h3>
+      </section>
+      
+      <section class="login-box">
+      <h2>PERSONAL BANKING</h2>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button id="loginBtn">LOGIN</button>
+      <p class="forgot"><a href="#" id="forgotUserPass">Forgot: Username / Password</a></p>
+      </section>
+
+  
+      <div class="or-box">-OR-</div>
+    
+      <section class="login-box">
+        <h2>PERSONAL BANKING</h2>
+        <input type="number" id="accountNumber" placeholder="Account Number">
+        <input type="text" id="pinInput" maxlength="4" placeholder="ATM PIN" required>
+        <button id="pinInputBtn">LOGIN</button>
+        <p class="forgot"><a href="#" id="forgotPin">Forgot PIN?</a></p>
+      </section>
+    </div>
+    
+
+    <section id="dashboard">
+      <h2>Welcome: <span id="displayName">User</span></h2>
+      <p>Account Number: <span id="accountNumberDisplay"></span></p>
+
+
+      <div class="actions-grid" id="balanceBtn">
+        <div class="actions-card">
+          <i class="bi bi-bank"></i>
+          <p>Check Balance</p>
+        </div>
+
+        <div class="actions-card" id="transferBtn">
+          <i class="bi bi-cash-coin"></i>
+          <p>Money Transfer</p>
+        </div>
+
+        <div class="actions-card" id="upiBtn">
+          <i class="bi bi-upc-scan"></i>
+          <p>Pay with UPI ID</p>
+        </div>
+
+        <div class="actions-card" id="historyBtn">
+          <i class="bi bi-clock-history"></i>
+          <p>Transaction History</p>
+        </div>
+
+        <div class="actions-card" id="servicesBtn">
+          <i class="bi bi-tools"></i>
+          <p>Services</p>
+        </div>
+
+        <div class="actions-card" id="billBtn">
+          <i class="bi bi-receipt"></i>
+          <p>Bill Payments</p>
+        </div>
+
+
+        <div class="actions-card">
+          <i class="bi bi-person-vcard"></i>
+          <p>Funds Transfer with Aadhaar&OTP</p>
+        </div>
+
+        <div class="actions-card">
+          <i class="bi bi-piggy-bank"></i>
+          <p>Deposits</p>
+        </div>
+
+        <div class="actions-card">
+          <i class="bi bi-cash-stack"></i>
+          <p>Loans</p>
+        </div>
+
+        <div class="actions-card">
+          <i class="bi bi-shield-lock"></i>
+          <p>Insurance</p>
+        </div>
+  
+        </div>
+      </div>
+      <div id = "actionArea"></div>
+    </section>
+  </main>
+  
+
+
+  <div class="instructions">
+      <h3> Login Instructions</h3>
+      <ul>
+        <li><b>Username:</b>Must include small and capital letters</li>
+        <li><b>Password:</b>Minimun 8 characters</li>
+        <li><b>ATM PIN:</b>Four digits of PIN</li>
+        <li><b>Account Number:</b>Must contain 10 digits:</li>
+      </ul>
+    </div>
+  <footer>
+    <p> © 2025 Banking System</p>
+  </footer>
+
+
+
+   <script>
+    const users = [
+    {username:"RAJ",password:"9848",accountNumber:"9154165172",pin:"1234",balance:10000,history:[]},
+    {username:"Abhi",password:"1234",accountNumber:"ME22B1063",pin:"4773",balance:20000,history:[]},
+    {username:"Sita",password:"4321",accountNumber:"9154165172",pin:"4773",balance:5000,history:[]},
+    {username:"Venu",password:"9666",accountNumber:"ME22B1043",pin:"1043",balance:30000,history:[]},
+];
+
+let currentUser = null;
+
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const loginBtn = document.getElementById("loginBtn");
+
+const accountNumber = document.getElementById("accountNumber");
+const pinInput = document.getElementById("pinInput");
+const pinInputBtn = document.getElementById("pinInputBtn");
+
+const dashboard = document.getElementById("dashboard");
+const displayName = document.getElementById("displayName");
+
+const balanceBtn =document.getElementById("balanceBtn");
+const transferBtn = document.getElementById("transferBtn");
+const billBtn = document.getElementById("billBtn");
+const historyBtn =document.getElementById("historyBtn");
+const upibtn = document.getElementById("upiBtn")
+
+const actionArea = document.getElementById("actionArea");
+const loginContainer = document.getElementById("login-container");
+const app = document.getElementById("app");
+const accountNumberDisplay = document.getElementById("accountNumberDisplay");
+const servicesBtn = document.getElementById("servicesBtn");
+
+
+
+// login with username and password:
+
+loginBtn.addEventListener("click",() => {
+    let username = usernameInput.value.trim();
+    let password = passwordInput.value.trim();
+
+    let account = users.find(u=> u.username === username && u.password === password);
+
+    if(account){
+      currentUser = account;
+      document.body.classList.add("logged-in");
+      document.body.className = "login-user"
+        dashboard.style.display = "block";
+        displayName.textContent = account.username;
+        accountNumberDisplay.textContent = account.accountNumber;
+        loginContainer.style.display = "none";
+        document.querySelector('.instructions').style.display ="none";
+        document.querySelector("h1").style.display = "none";
+
+
+    }else{
+        alert("Invalid Username or Password! Try again")
+    }
+});
+
+// LOGIN WITH ACCOUNT NUMBER AND ATM PIN
+
+pinInputBtn.addEventListener("click",()=>{
+  let accountNo = accountNumber.value.trim();
+  let pin = pinInput.value.trim();
+
+  let account = users.find(u=> u.accountNumber === accountNo && u.pin === pin)
+
+  if(account){
+    currentUser = account;
+    document.body.classList.add("logged-in","login-user");
+    document.body.className = "login-pin";
+    dashboard.style.display = "block";
+    displayName.textContent = account.username;
+    accountNumberDisplay.textContent = account.accountNumber;
+    loginContainer.style.display="none";
+    document.querySelector('.instructions').style.display = "none";
+    document.querySelector("h1").style.display = "none";
+  }else{
+    alert("Invalid Account Number or PIN")
+  }
+});
+// ATM PIN
+document.getElementById("forgotPin").addEventListener("click",(e)=>{
+  e.preventDefault();
+  alert("For security reasons, please visit your nearest ATM or bank branch to reset your PIN")
+});
+
+// FORGOT USERNAME/PASSWORD
+
+document.getElementById("forgotUserPass").addEventListener("click",(e)=>{
+e.preventDefault();
+
+let accountNo = prompt("Enter the Account Number to retrive username/password");
+
+if(!accountNo){
+  alert("Account Number is required")
+  return;
+}
+
+let account = users.find(u=>u.accountNumber === accountNo);
+
+if(account){
+  alert(`Your Username:${account.username}\nYour Password:${account.password}`);
+}else{
+  alert("No account found with this Account Number.")
+}
+})
+
+
+// CHECK BALANCE 
+
+balanceBtn.querySelector("div").addEventListener("click",() =>{
+  let account =users.find(u=> u.username === displayName.textContent || u.accountNumber === accountNumberDisplay.textContent);
+
+
+  if(currentUser){
+    document.querySelector(".actions-grid").style.display ="none";
+    document.body.classList.add("show-balance");
+    actionArea.innerHTML = `
+      <div class="summary-card">
+      <h2>Account Balance</h2>
+      <p>Your current balance is: <b>${currentUser.balance}</b></p>
+      <button id="backBtn">Back</button>
+      </div>
+      `;
+
+    document.getElementById("backBtn").addEventListener("click",()=>{
+      document.querySelector(".actions-grid").style.display = "grid";
+      actionArea.innerHTML ="";
+      document.body.classList.remove("show-balance")
+    });
+  }
+});
+
+// WITH UPI ID
+
+upibtn.addEventListener("click",() =>{
+  let sender = users.find(u=> u.username === displayName.textContent || u.accountNumber === accountNumberDisplay.textContent);
+   if(!sender) return;
+
+   document.querySelector(".actions-grid").style.display="none";
+    actionArea.innerHTML = `
+    <div class="summary-card">
+      <h2>Pay With UPI</h2>
+      <input type="text" id="upiId" placeholder="Receiver UPI id">
+      <input type="number" id="upiAmount" placeholder="Amount">
+      <button id="upiPayBtn">Pay</button>
+      <button class="backBtn">Back</button>
+      </div>
+      `;
+      actionArea.querySelector("#upiPayBtn").addEventListener("click",()=>{
+        let upiId = document.getElementById("upiId").value.trim();
+        let amount = parseFloat(document.getElementById("upiAmount").value);
+
+        if(!upiId.includes("@")){
+          alert("Enter a valid UPI ID");
+          return;
+        }
+        if(isNaN(amount) || amount<=0){
+        alert("Enter a valid amount")
+        return;
+        }
+        if(amount > sender.balance){
+          alert("Insufficeint Balance")
+          return;
+        }
+        let now = new Date();
+        let dateTime = now.toLocaleString();
+
+
+        sender.balance = sender.balance - amount;
+        currentUser.history.push({
+          date:dateTime,
+          details:`Paid ${amount} via UPI to ${upiId}`});
+        
+        actionArea.innerHTML =`
+        <div class="summary-card">
+          <h2> UPI payment successful</h2>
+          <p>You Paid ${amount} to <b>${upiId}</b></p>
+          <p><b>Date & Time:</b> ${dateTime}</p>
+          <p><b>Transaction ID:</b> TXN${Math.floor(Math.random()*1000000)}</p>
+          <button class="backBtn">Back</button>
+        </div>
+        `;
+
+        actionArea.querySelector(".backBtn").addEventListener("click",()=>{
+          document.querySelector(".actions-grid").style.display = "grid";
+          actionArea.innerHTML = "";
+        });
+      });
+      actionArea.querySelector(".backBtn").addEventListener("click",()=>{
+          document.querySelector(".actions-grid").style.display = "grid";
+          actionArea.innerHTML = "";
+        });
+  
+});
+
+//MONEY TRANSFER
+
+transferBtn.addEventListener("click",() =>{
+  sender = users.find(u=> u.username === displayName.textContent || u.accountNumber === accountNumberDisplay.textContent)
+
+  if(!sender) return;
+
+  document.querySelector(".actions-grid").style.display = "none";
+  actionArea.innerHTML = `
+  <div class="summary-card">
+    <h2>Money Transfer<h2>
+    <input class="text" id="accountHolderName" placeholder="Account Holder Name">
+    <input class="number" id="accountHolderNumber" placeholder="Account Number">
+    <input class="number" id="confirmAccountHolderNumber" placeholder="Confirm Account Number">
+    <input class="text-number" id="branchIFSC" placeholder="IFSC CODE">
+    <input class="number" id="amount" placeholder="Amount">
+    <button id="payButton">Submit</button>
+    <button class="backBtn">Back</button>
+    </div>
+    `;
+    actionArea.querySelector("#payButton").addEventListener("click",()=>{
+      let Name = document.getElementById("accountHolderName");
+      let accountHolderNumber= document.getElementById("accountHolderNumber");
+      let amount =parseFloat(document.getElementById("amount").value);
+      let confirmAccountHolderNumber = document.getElementById("confirmAccountHolderNumber");
+
+      if(accountHolderNumber.value !== confirmAccountHolderNumber.value){
+        alert("Account number do not match");
+        return;
+      }
+
+      if(isNaN(amount)|| amount<=0){
+        alert("Enter a Valid amount");
+        return;
+      }
+      if(amount > sender.balance){
+        alert("Insuffient Balance");
+        return;
+      }
+      let now = new Date();
+      let dateTime = now.toLocaleString();
+
+      sender.balance = sender.balance - amount;
+      currentUser.history.push({
+      date:dateTime,
+      details:`Paid ${amount} Via Bank Transfer to A/C:${accountHolderNumber.value}`});
+
+      actionArea.innerHTML =`
+      <div class="summary-card">
+        <h2>Payment Successful</h2>
+        <p>You paid <b>${amount}</b> to ${Name.value} (A/C: ${accountHolderNumber.value})</p>
+        <p><b>Date & Time:</b> ${dateTime}</p>
+        <p><b>Transaction ID:</b> TXN${Math.floor(Math.random()*1000000)}</p>
+        <button class="backBtn">Back</button>
+        </div>
+        `;
+        actionArea.querySelector(".backBtn").addEventListener("click",()=>{
+          document.querySelector(".actions-grid").style.display = "grid";
+          actionArea.innerHTML="";
+        });
+
+    });
+       actionArea.querySelector(".backBtn").addEventListener("click",()=>{
+          document.querySelector(".actions-grid").style.display = "grid";
+          actionArea.innerHTML="";
+       });     
+});
+
+
+
+ // TRANSACTION HISTORY
+
+ historyBtn.addEventListener("click",()=>{
+  if(!currentUser)return;
+
+  document.querySelector(".actions-grid").style.display = "none";
+
+  if(currentUser.history.length === 0){
+    actionArea.innerHTML = `
+  <div class="summary-card">
+    <h2>Transaction History</h2>
+    <p>No Transaction found.</p>
+    <button class="backBtn">Back</button>
+  </div>
+  `;
+
+  }else{
+    let historyHTML = `
+    <div class="summary-card">
+      <h2>Transaction History</h2>
+      <table border="1" style="width:100%;border-collapse:collapse; color:black; background:white;">
+        <thead>
+          <tr style="background:#2193b0;color:white;">
+            <th>Date & Time</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+    currentUser.history.forEach(txn => {
+      historyHTML +=`
+      <tr>
+          <td>${txn.date}</td>
+          <td>${txn.details}</td>
+      </tr>
+      `;
+      
+    });
+    
+    historyHTML +=`
+    </tbody>
+    </table>
+    <button class="backBtn">Back</button>
+    </div>
+    `;
+
+    actionArea.innerHTML = historyHTML;
+  }
+  actionArea.querySelector(".backBtn").addEventListener("click",()=>{
+    document.querySelector(".actions-grid").style.display = "grid";
+    actionArea.innerHTML = "";
+  });
+
+ });
+
+ // SERVICES
+
+ servicesBtn.addEventListener("click",()=>{
+  document.querySelector(".actions-grid").style.display = "none";
+
+  actionArea.innerHTML=`
+  <div class="summary-card">
+    <h2>Available Services</h2>
+    <ul style="list-style:none;padding:0;text-align:left;color:black;">
+      <li><button class="serviceBtn" id="chequeBookBtn"> Cheque Book Request</button></li>
+      <li><button class="serviceBtn" id="stopCheckBookBtn"> Stop Cheque</button></li>
+      <li><button class="serviceBtn" id="activateSms"> Activate SMS Alert</button></li>
+      <li><button class="serviceBtn" id="updateEmailAddress"> Update Email Address</button></li>
+      <li><button class="serviceBtn" id="creditCardServices"> Credit Card Services</button></li>
+      <li><button class="serviceBtn" id="atmServices"> ATM Services</button></li>
+      <li><button id="updateKyc"> Update KYC</button></li>
+    <button class="backBtn">Back</button>
+  </div>
+  `;
+   // SEVICES BUTTONS UNDER MAINTENANCE
+  document.querySelectorAll(".serviceBtn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    alert("this service is under maintenance")
+  });
+});
+  
+  actionArea.querySelector(".backBtn").addEventListener("click",()=>{
+    document.querySelector(".actions-grid").style.display = "grid";
+    actionArea.innerHTML = "";
+  });
+ });
+
+
+ // FEATURES UNDER MAINTENANCE
+
+const billBtnCard = document.getElementById("billBtn");
+const aadhaarBtnCard = document.querySelector(".actions-card i.bi-person-vcard").parentElement;
+const loansBtnCard = document.querySelector(".actions-card i.bi-cash-stack").parentElement;
+const insuranceBtnCard = document.querySelector(".actions-card i.bi-shield-lock").parentElement;
+const depositBtnCard = document.querySelector(".actions-card i.bi-piggy-bank" ).parentElement;
+
+[billBtnCard,aadhaarBtnCard,loansBtnCard,insuranceBtnCard,depositBtnCard ].forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    alert("This service is under maintenance.Please try again later.")
+//     document.querySelector(".actions-grid").style.display = "none";
+//     actionArea.innerHTML = `
+//     <div class="summary-card">
+//       <h2>Under Maintenance</h2>
+//       <button id="backBtn">Back</button>
+//       </div>
+//       `;
+
+//       document.getElementById("backBtn").addEventListener("click",()=>{
+//         document.querySelector(".actions-grid").style.display = "grid";
+//         actionArea.innerHTML="";
+//       });
+  });
+ });
+
+   </script>
+</body>
+</html>
